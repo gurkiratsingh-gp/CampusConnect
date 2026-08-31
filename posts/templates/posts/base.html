@@ -13,6 +13,23 @@
     <style>
         .campus-nav { background: linear-gradient(105deg, #4f46e5, #7c3aed); }
         .brand-mark { width: 34px; height: 34px; display: inline-grid; place-items: center; border-radius: 11px; background: rgba(255,255,255,.18); }
+        main form p { margin-bottom: 1rem; }
+        main form label { display: block; font-weight: 600; margin-bottom: .4rem; }
+        main form input:not([type="checkbox"]):not([type="radio"]),
+        main form textarea,
+        main form select {
+            display: block;
+            width: 100%;
+            padding: .65rem .75rem;
+            border: 1px solid #d1d5db;
+            border-radius: .5rem;
+            background: #fff;
+        }
+        main form input:focus, main form textarea:focus, main form select:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 .2rem rgba(99,102,241,.15);
+        }
     </style>
 
     <nav class="navbar navbar-dark campus-nav shadow-sm">

@@ -1,17 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login - CampusConnect</title>
-</head>
-<body>
-    <h1>Login to CampusConnect</h1>
+{% extends "posts/base.html" %}
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
+{% block title %}Login - CampusConnect{% endblock %}
 
-    <p><a href="/">Back to home</a></p>
-</body>
-</html>
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-5">
+            <div class="card border-0 shadow-sm overflow-hidden">
+                <div class="p-4 text-white" style="background: linear-gradient(105deg, #4f46e5, #7c3aed);">
+                    <div class="fs-2 mb-2">👋</div>
+                    <h1 class="h2 fw-bold mb-1">Welcome back</h1>
+                    <p class="mb-0 opacity-75">Log in to your campus community.</p>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                    {% endif %}
+                    <form method="post">
+                        {% csrf_token %}
+                        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+                        <p>
+                            <label for="id_username">Username</label>
+                            <input type="text" name="username" id="id_username" required autofocus>
+                        </p>
+                        <p>
+                            <label for="id_password">Password</label>
+                            <input type="password" name="password" id="id_password" required>
+                        </p>
+                        <button class="btn btn-primary w-100 py-2" type="submit">Log In</button>
+                    </form>
+                    <p class="text-center text-muted mt-4 mb-0">
+                        New here? <a class="fw-semibold text-decoration-none" href="/signup/">Create an account</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

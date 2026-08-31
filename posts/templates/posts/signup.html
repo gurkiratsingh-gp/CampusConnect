@@ -1,17 +1,52 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Sign Up - CampusConnect</title>
-</head>
-<body>
-    <h1>Create your CampusConnect account</h1>
+{% extends "posts/base.html" %}
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create Account</button>
-    </form>
+{% block title %}Sign Up - CampusConnect{% endblock %}
 
-    <p>Already have an account? <a href="/accounts/login/">Login</a></p>
-</body>
-</html>
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm overflow-hidden">
+                <div class="p-4 text-white" style="background: linear-gradient(105deg, #4f46e5, #7c3aed);">
+                    <div class="fs-2 mb-2">🎓</div>
+                    <h1 class="h2 fw-bold mb-1">Join CampusConnect</h1>
+                    <p class="mb-0 opacity-75">Create your student community account.</p>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                    {% endif %}
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <p>
+                            <label for="id_username">Username</label>
+                            <input type="text" name="username" id="id_username" value="{{ form.username.value|default_if_none:'' }}" required autofocus>
+                            {% for error in form.username.errors %}<small class="text-danger">{{ error }}</small>{% endfor %}
+                        </p>
+                        <p>
+                            <label for="id_email">Email address</label>
+                            <input type="email" name="email" id="id_email" value="{{ form.email.value|default_if_none:'' }}" required>
+                            {% for error in form.email.errors %}<small class="text-danger">{{ error }}</small>{% endfor %}
+                        </p>
+                        <p>
+                            <label for="id_password1">Password</label>
+                            <input type="password" name="password1" id="id_password1" required>
+                            <small class="text-muted">Use at least 8 characters.</small>
+                            {% for error in form.password1.errors %}<small class="text-danger d-block">{{ error }}</small>{% endfor %}
+                        </p>
+                        <p>
+                            <label for="id_password2">Confirm password</label>
+                            <input type="password" name="password2" id="id_password2" required>
+                            {% for error in form.password2.errors %}<small class="text-danger">{{ error }}</small>{% endfor %}
+                        </p>
+
+                        <button class="btn btn-primary w-100 py-2" type="submit">Create Account</button>
+                    </form>
+                    <p class="text-center text-muted mt-4 mb-0">
+                        Already have an account? <a class="fw-semibold text-decoration-none" href="/accounts/login/">Log in</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
