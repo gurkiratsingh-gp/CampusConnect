@@ -1,0 +1,41 @@
+{% extends "posts/base.html" %}
+
+{% block title %}Communities - CampusConnect{% endblock %}
+
+{% block content %}
+    <div class="text-center mb-5">
+        <p class="text-primary fw-semibold mb-1">CONNECT ON CAMPUS</p>
+        <h1 class="display-6 fw-bold">Discover Communities</h1>
+        <p class="lead text-muted">Find people, conversations, and opportunities that matter to you.</p>
+    </div>
+
+    <div class="row g-4">
+        {% for community in communities %}
+            <div class="col-md-6 col-lg-4">
+                <a class="text-decoration-none" href="/communities/{{ community.id }}/">
+                    <div class="card h-100 shadow-sm border-0 community-card">
+                        <div class="card-body p-4">
+                            <div class="fs-2 mb-3">👥</div>
+                            <h4 class="fw-bold text-dark">{{ community.name }}</h4>
+                            <p class="text-muted mb-3">
+                                {{ community.description|default:"A campus community for students." }}
+                            </p>
+                            <span class="btn btn-outline-primary btn-sm">
+                                Explore {{ community.posts.count }} posts
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">No communities yet. Create them from the admin panel.</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <style>
+        .community-card { transition: transform .18s ease, box-shadow .18s ease; }
+        .community-card:hover { transform: translateY(-4px); box-shadow: 0 .75rem 1.5rem rgba(79,70,229,.13) !important; }
+    </style>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "posts/base.html" %}
+
+{% block title %}Edit Profile - CampusConnect{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <p class="text-primary fw-semibold mb-1">YOUR PROFILE</p>
+                    <h1 class="fw-bold mb-4">Edit your details</h1>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="btn btn-primary" type="submit">Save Profile</button>
+                        <a class="btn btn-outline-secondary" href="/profile/{{ user.username }}/">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

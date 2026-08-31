@@ -1,0 +1,43 @@
+{% extends "posts/base.html" %}
+
+{% block title %}{{ event.title }} - CampusConnect{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <a class="text-decoration-none" href="/events/">← All events</a>
+
+            <div class="card border-0 shadow-sm mt-3 overflow-hidden">
+                <div class="p-4 p-md-5 text-white" style="background: linear-gradient(105deg, #4f46e5, #7c3aed);">
+                    {% if event.community %}<span class="badge text-bg-light text-primary mb-3">{{ event.community.name }}</span>{% endif %}
+                    <h1 class="display-6 fw-bold">{{ event.title }}</h1>
+                    <p class="mb-0 fs-5">Hosted by <a class="text-white" href="/profile/{{ event.created_by.username }}/">{{ event.created_by.username }}</a></p>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    <div class="row text-center g-3 mb-4">
+                        <div class="col-md-4"><div class="bg-light rounded p-3"><strong>📅 Date</strong><br>{{ event.event_date|date:"d M Y" }}</div></div>
+                        <div class="col-md-4"><div class="bg-light rounded p-3"><strong>🕒 Time</strong><br>{{ event.event_date|date:"h:i A" }}</div></div>
+                        <div class="col-md-4"><div class="bg-light rounded p-3"><strong>📍 Location</strong><br>{{ event.location }}</div></div>
+                    </div>
+
+                    <h3 class="fw-bold">About this Event</h3>
+                    <p class="text-muted">{{ event.description|linebreaksbr }}</p>
+
+                    <div class="d-flex justify-content-between align-items-center border-top pt-4 mt-4">
+                        <span class="text-muted">👥 {{ event.rsvps.count }} student{{ event.rsvps.count|pluralize }} going</span>
+                        {% if user.is_authenticated %}
+                            <form method="post" action="/events/{{ event.id }}/rsvp/">
+                                {% csrf_token %}
+                                <button class="btn {% if is_going %}btn-outline-primary{% else %}btn-primary{% endif %}" type="submit">
+                                    {% if is_going %}Cancel RSVP{% else %}RSVP Now{% endif %}
+                                </button>
+                            </form>
+                        {% else %}
+                            <a class="btn btn-primary" href="/accounts/login/">Login to RSVP</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

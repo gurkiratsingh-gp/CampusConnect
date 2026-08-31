@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up - CampusConnect</title>
+</head>
+<body>
+    <h1>Create your CampusConnect account</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Account</button>
+    </form>
+
+    <p>Already have an account? <a href="/accounts/login/">Login</a></p>
+</body>
+</html>

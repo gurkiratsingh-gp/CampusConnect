@@ -1,0 +1,49 @@
+{% extends "posts/base.html" %}
+
+{% block title %}{{ profile_user.username }} - CampusConnect{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4 overflow-hidden">
+                <div class="p-4 text-white" style="background: linear-gradient(105deg, #4f46e5, #7c3aed);">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle bg-white text-primary fw-bold d-inline-flex align-items-center justify-content-center fs-3" style="width: 70px; height: 70px;">
+                            {{ profile_user.username|first|upper }}
+                        </div>
+                        <div>
+                            <h1 class="h2 fw-bold mb-1">{{ profile_user.username }}</h1>
+                            <p class="mb-0">{{ profile.department|default:"CampusConnect student" }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    {% if profile.bio %}
+                        <p>{{ profile.bio }}</p>
+                    {% else %}
+                        <p class="text-muted">No bio added yet.</p>
+                    {% endif %}
+                    {% if profile.year %}
+                        <span class="badge text-bg-light border">Year {{ profile.year }}</span>
+                    {% endif %}
+                    {% if user == profile_user %}
+                        <a class="btn btn-outline-primary btn-sm float-end" href="/profile/edit/">Edit profile</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <h3 class="mb-3">Posts by {{ profile_user.username }}</h3>
+            {% for post in posts %}
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body">
+                        {% if post.community %}<span class="badge text-bg-primary mb-2">{{ post.community.name }}</span>{% endif %}
+                        <p class="mb-2">{{ post.content }}</p>
+                        <small class="text-muted">{{ post.created_at|date:"d M Y, h:i A" }}</small>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="alert alert-info">No posts yet.</div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

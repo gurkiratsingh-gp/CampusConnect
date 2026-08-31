@@ -1,0 +1,23 @@
+{% extends "posts/base.html" %}
+
+{% block title %}Report Post - CampusConnect{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <p class="text-warning fw-semibold mb-1">KEEP CAMPUSCONNECT SAFE</p>
+                    <h1 class="fw-bold mb-2">Report a Post</h1>
+                    <p class="text-muted">You are reporting: “{{ post.content|truncatechars:120 }}”</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="btn btn-warning" type="submit">Submit Report</button>
+                        <a class="btn btn-outline-secondary" href="/">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

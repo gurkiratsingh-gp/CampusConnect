@@ -1,0 +1,144 @@
+{% extends "posts/base.html" %}
+
+{% block title %}Home - CampusConnect{% endblock %}
+
+{% block content %}
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold">Welcome to CampusConnect</h1>
+        <p class="lead text-muted">
+            A private social platform for college students.
+        </p>
+
+        {% if user.is_authenticated %}
+            <p class="text-success">
+                Logged in as <strong>{{ user.username }}</strong>
+            </p>
+        {% endif %}
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h2 class="mb-3">Latest Posts</h2>
+
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                <a class="btn btn-sm {% if not selected_category %}btn-primary{% else %}btn-outline-primary{% endif %}" href="/">
+                    All
+                </a>
+                {% for category in categories %}
+                    <a class="btn btn-sm {% if selected_category == category %}btn-primary{% else %}btn-outline-primary{% endif %}"
+                       href="/?category={{ category|urlencode }}">
+                        {{ category }}
+                    </a>
+                {% endfor %}
+            </div>
+
+            {% for post in posts %}
+                <div class="card shadow-sm mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a class="text-decoration-none text-dark" href="/profile/{{ post.author.username }}/">
+                                <span class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                    {{ post.author.username|first|upper }}
+                                </span>
+                                {{ post.author.username }}
+                            </a>
+                        </h5>
+                        {% if post.community %}
+    <span class="badge text-bg-primary mb-2">
+        {{ post.community.name }}
+    </span>
+{% endif %}
+                        <span class="badge text-bg-light border text-dark mb-2">✨ {{ post.ai_category }}</span>
+                        <p class="card-text">{{ post.content }}</p>
+
+                        {% if post.image %}
+                            <img class="img-fluid rounded mb-3" src="{{ post.image.url }}" alt="Image shared by {{ post.author.username }}">
+                        {% endif %}
+
+                        <div class="d-flex gap-2 mb-3">
+                            <form method="post" action="/posts/{{ post.id }}/like/">
+                                {% csrf_token %}
+                                <button class="btn btn-outline-primary btn-sm" type="submit">
+                                    ♥ Like ({{ post.likes.count }})
+                                </button>
+                            </form>
+
+                            {% if user.is_authenticated %}
+                                <form method="post" action="/posts/{{ post.id }}/bookmark/">
+                                    {% csrf_token %}
+                                    <button class="btn btn-outline-dark btn-sm" type="submit">
+                                        🔖 Save
+                                    </button>
+                                </form>
+                            {% endif %}
+
+                            <a class="btn btn-outline-secondary btn-sm"
+                               href="/posts/{{ post.id }}/comment/">
+                                💬 Comment ({{ post.comments.count }})
+                            </a>
+
+                            {% if user.is_authenticated and user != post.author %}
+                                <a class="btn btn-outline-warning btn-sm" href="/posts/{{ post.id }}/report/">
+                                    Report
+                                </a>
+                            {% endif %}
+
+                            {% if user == post.author %}
+                                <a class="btn btn-outline-dark btn-sm" href="/posts/{{ post.id }}/edit/">
+                                    Edit
+                                </a>
+                                <form method="post"
+                                      action="/posts/{{ post.id }}/delete/">
+                                    {% csrf_token %}
+                                    <button class="btn btn-outline-danger btn-sm"
+                                            type="submit">
+                                        Delete
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+
+                        {% for comment in post.comments.all %}
+                            <div class="bg-light rounded p-2 mb-2">
+                                <strong>{{ comment.author.username }}</strong>
+                                <p class="mb-0">{{ comment.content }}</p>
+                            </div>
+                        {% empty %}
+                            <p class="text-muted small">No comments yet.</p>
+                        {% endfor %}
+
+                        <small class="text-muted">
+                            {{ post.created_at|date:"d M Y, h:i A" }}
+                        </small>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="alert alert-info">
+                    No posts yet. Be the first person to create one.
+                </div>
+            {% endfor %}
+
+            {% if page_obj.paginator.num_pages > 1 %}
+                <nav class="mt-4" aria-label="Post pages">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="/?page={{ page_obj.previous_page_number }}{% if selected_category %}&category={{ selected_category|urlencode }}{% endif %}">Previous</a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item disabled">
+                            <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                        </li>
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="/?page={{ page_obj.next_page_number }}{% if selected_category %}&category={{ selected_category|urlencode }}{% endif %}">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

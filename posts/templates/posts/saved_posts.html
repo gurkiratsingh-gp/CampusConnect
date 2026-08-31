@@ -1,0 +1,32 @@
+{% extends "posts/base.html" %}
+
+{% block title %}Saved Posts - CampusConnect{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <p class="text-primary fw-semibold mb-1">YOUR COLLECTION</p>
+            <h1 class="fw-bold mb-4">Saved Posts</h1>
+
+            {% for bookmark in saved %}
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body">
+                        <a class="fw-bold text-decoration-none" href="/profile/{{ bookmark.post.author.username }}/">
+                            {{ bookmark.post.author.username }}
+                        </a>
+                        {% if bookmark.post.community %}
+                            <span class="badge text-bg-primary ms-2">{{ bookmark.post.community.name }}</span>
+                        {% endif %}
+                        <p class="my-2">{{ bookmark.post.content }}</p>
+                        {% if bookmark.post.image %}
+                            <img class="img-fluid rounded mb-2" src="{{ bookmark.post.image.url }}" alt="Saved post image">
+                        {% endif %}
+                        <small class="text-muted">Saved {{ bookmark.created_at|date:"d M Y, h:i A" }}</small>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="alert alert-info">No saved posts yet. Use the Save button on useful posts.</div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

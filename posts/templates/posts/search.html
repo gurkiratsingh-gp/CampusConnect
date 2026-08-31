@@ -1,0 +1,70 @@
+{% extends "posts/base.html" %}
+
+{% block title %}Search - CampusConnect{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <p class="text-primary fw-semibold mb-1">DISCOVER CAMPUS</p>
+            <h1 class="fw-bold">Search CampusConnect</h1>
+            <p class="text-muted">Find posts, communities, and events.</p>
+
+            <form class="input-group input-group-lg mb-5" method="get">
+                <input class="form-control" name="q" value="{{ query }}" placeholder="Search Python, placement, workshop...">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+
+            {% if query %}
+                <p class="text-muted mb-4">Results for <strong>“{{ query }}”</strong></p>
+
+                {% if communities %}
+                    <h3 class="mb-3">Communities</h3>
+                    <div class="row g-3 mb-5">
+                        {% for community in communities %}
+                            <div class="col-md-6">
+                                <a class="text-decoration-none" href="/communities/{{ community.id }}/">
+                                    <div class="card border-0 shadow-sm h-100">
+                                        <div class="card-body">
+                                            <h5 class="text-dark fw-bold">👥 {{ community.name }}</h5>
+                                            <p class="text-muted mb-0">{{ community.description|default:"Campus community" }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if events %}
+                    <h3 class="mb-3">Events</h3>
+                    {% for event in events %}
+                        <div class="card border-0 shadow-sm mb-3">
+                            <div class="card-body">
+                                <h5 class="fw-bold">📅 {{ event.title }}</h5>
+                                <p class="mb-1">{{ event.description|truncatechars:160 }}</p>
+                                <small class="text-muted">{{ event.event_date|date:"d M Y, h:i A" }} · {{ event.location }}</small>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if posts %}
+                    <h3 class="mb-3 mt-5">Posts</h3>
+                    {% for post in posts %}
+                        <div class="card border-0 shadow-sm mb-3">
+                            <div class="card-body">
+                                <a class="fw-bold text-decoration-none" href="/profile/{{ post.author.username }}/">{{ post.author.username }}</a>
+                                <p class="mb-1">{{ post.content }}</p>
+                                <small class="text-muted">{{ post.created_at|date:"d M Y, h:i A" }}</small>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if not communities and not events and not posts %}
+                    <div class="alert alert-info">No results found. Try a different word.</div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "posts/base.html" %}
+
+{% block title %}Notifications - CampusConnect{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <p class="text-primary fw-semibold mb-1">ACTIVITY</p>
+            <h1 class="fw-bold mb-4">Notifications</h1>
+
+            {% for notification in notifications %}
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="rounded-circle bg-primary text-white fw-bold d-inline-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                            {{ notification.actor.username|first|upper }}
+                        </div>
+                        <div>
+                            <a class="fw-bold text-decoration-none" href="/profile/{{ notification.actor.username }}/">
+                                {{ notification.actor.username }}
+                            </a>
+                            {{ notification.message }}
+                            {% if notification.post %}
+                                <div class="text-muted small">{{ notification.post.content|truncatechars:80 }}</div>
+                            {% endif %}
+                            {% if notification.event %}
+                                <div class="text-muted small">{{ notification.event.title }}</div>
+                            {% endif %}
+                        </div>
+                        <small class="text-muted ms-auto">{{ notification.created_at|timesince }} ago</small>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="alert alert-info">No notifications yet. Activity on your posts and events will appear here.</div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

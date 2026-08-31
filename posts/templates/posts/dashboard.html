@@ -1,0 +1,39 @@
+{% extends "posts/base.html" %}
+
+{% block title %}Dashboard - CampusConnect{% endblock %}
+
+{% block content %}
+    <div class="mb-4">
+        <p class="text-primary fw-semibold mb-1">YOUR ACTIVITY</p>
+        <h1 class="fw-bold">Welcome back, {{ user.username }}</h1>
+        <p class="text-muted">Here is a quick view of your CampusConnect activity.</p>
+    </div>
+
+    <div class="row g-3 mb-5">
+        <div class="col-6 col-lg-4"><div class="card border-0 shadow-sm"><div class="card-body"><p class="text-muted mb-1">Posts</p><h2 class="fw-bold mb-0">{{ stats.posts }}</h2></div></div></div>
+        <div class="col-6 col-lg-4"><div class="card border-0 shadow-sm"><div class="card-body"><p class="text-muted mb-1">Likes received</p><h2 class="fw-bold mb-0">{{ stats.likes_received }}</h2></div></div></div>
+        <div class="col-6 col-lg-4"><div class="card border-0 shadow-sm"><div class="card-body"><p class="text-muted mb-1">Comments received</p><h2 class="fw-bold mb-0">{{ stats.comments_received }}</h2></div></div></div>
+        <div class="col-6 col-lg-4"><div class="card border-0 shadow-sm"><div class="card-body"><p class="text-muted mb-1">Events created</p><h2 class="fw-bold mb-0">{{ stats.events_created }}</h2></div></div></div>
+        <div class="col-6 col-lg-4"><div class="card border-0 shadow-sm"><div class="card-body"><p class="text-muted mb-1">Event RSVPs</p><h2 class="fw-bold mb-0">{{ stats.rsvps }}</h2></div></div></div>
+        <div class="col-6 col-lg-4"><div class="card border-0 shadow-sm"><div class="card-body"><p class="text-muted mb-1">Items reported</p><h2 class="fw-bold mb-0">{{ stats.items_reported }}</h2></div></div></div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold mb-0">Your recent posts</h3>
+        <div>
+            <a class="btn btn-outline-primary btn-sm" href="/export-posts/">Download CSV</a>
+            <a class="btn btn-primary btn-sm" href="/create-post/">Create Post</a>
+        </div>
+    </div>
+    {% for post in recent_posts %}
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body">
+                {% if post.community %}<span class="badge text-bg-primary mb-2">{{ post.community.name }}</span>{% endif %}
+                <p class="mb-1">{{ post.content }}</p>
+                <small class="text-muted">{{ post.created_at|date:"d M Y, h:i A" }}</small>
+            </div>
+        </div>
+    {% empty %}
+        <div class="alert alert-info">You have not posted yet. Share your first campus update.</div>
+    {% endfor %}
+{% endblock %}
